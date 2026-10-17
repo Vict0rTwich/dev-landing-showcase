@@ -1,0 +1,259 @@
+@import "tailwindcss";
+
+/*
+ * Volans design tokens
+ *
+ * Audience   Platform and product engineers choosing where production runs.
+ * Feeling    Precise and fast. Mission control at 3am: quiet surfaces, bright instruments.
+ * Direction  Product-marketing restraint crossed with avionics telemetry: a wide grotesque
+ *            display face, mono readouts, IATA-coded edge regions.
+ * Layout     Left-aligned, asymmetric 12-column measure (1200px). A live deploy console
+ *            carries the hero; hairline matrices below it.
+ * Signature  The deploy console: one git push fanning out to 34 edge regions.
+ */
+
+:root {
+  /* Surfaces: obsidian with a slight blue bias toward the accent. */
+  --background: #0b0f17;
+  --background-deep: #080b12;
+  --surface: #0f141e;
+  --surface-raised: #141a26;
+
+  /* Ink. Contrast on --background: 15.6:1, 6.5:1, 5.0:1. */
+  --foreground: #e7eaf3;
+  --muted-foreground: #8e96ab;
+  --subtle-foreground: #7a829b;
+
+  /* Hairlines */
+  --border: rgb(148 163 203 / 0.12);
+  --border-strong: rgb(148 163 203 / 0.22);
+  --grid-line: rgb(148 163 203 / 0.065);
+
+  /* Accent light sources */
+  --indigo: #6366f1;
+  --indigo-soft: #818cf8;
+  --indigo-light: #a5b4fc;
+  --violet: #a78bfa;
+  --cyan: #22d3ee;
+  --cyan-soft: #67e8f9;
+  --chart-series: #7a80f6;
+
+  /* Ambient glows, used as light rather than fill */
+  --glow-indigo: rgb(99 102 241 / 0.3);
+  --glow-violet: rgb(139 92 246 / 0.18);
+  --glow-cyan: rgb(34 211 238 / 0.12);
+  --glow-cell: rgb(129 140 248 / 0.1);
+  --spot-edge: rgb(129 140 248 / 0.75);
+  --spot-edge-far: rgb(34 211 238 / 0.28);
+
+  /* State */
+  --live: #34d399;
+  --warn: #fbbf24;
+  --danger: #f87171;
+  --ring: var(--indigo-light);
+
+  /* Layout */
+  --gutter: 1rem;
+  --header-height: 4rem;
+
+  color-scheme: dark;
+}
+
+@media (width >= 40rem) {
+  :root {
+    --gutter: 1.5rem;
+  }
+}
+
+@media (width >= 64rem) {
+  :root {
+    --gutter: 2rem;
+  }
+}
+
+/* Only the tokens above exist as colors. */
+@theme {
+  --color-*: initial;
+  --color-white: #fff;
+  --color-black: #000;
+
+  --animate-gradient-pan: gradient-pan 9s ease-in-out infinite;
+  --animate-ping-slow: ping-slow 2.4s cubic-bezier(0, 0, 0.2, 1) infinite;
+  --animate-orbit: orbit 6s linear infinite;
+  --animate-caret: caret 1.1s steps(1) infinite;
+
+  @keyframes gradient-pan {
+    0%,
+    100% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+
+  @keyframes ping-slow {
+    0% {
+      transform: scale(1);
+      opacity: 0.7;
+    }
+    80%,
+    100% {
+      transform: scale(2.6);
+      opacity: 0;
+    }
+  }
+
+  @keyframes orbit {
+    to {
+      rotate: 360deg;
+    }
+  }
+
+  @keyframes caret {
+    50% {
+      opacity: 0;
+    }
+  }
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-background-deep: var(--background-deep);
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-foreground: var(--foreground);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-subtle-foreground: var(--subtle-foreground);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-indigo: var(--indigo);
+  --color-indigo-soft: var(--indigo-soft);
+  --color-indigo-light: var(--indigo-light);
+  --color-violet: var(--violet);
+  --color-cyan: var(--cyan);
+  --color-cyan-soft: var(--cyan-soft);
+  --color-chart: var(--chart-series);
+  --color-live: var(--live);
+  --color-warn: var(--warn);
+  --color-danger: var(--danger);
+  --color-ring: var(--ring);
+
+  --font-sans: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+}
+
+@layer base {
+  *,
+  ::before,
+  ::after {
+    border-color: var(--border);
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+
+  body {
+    min-height: 100%;
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::selection {
+    background: rgb(99 102 241 / 0.4);
+    color: #fff;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 3px;
+  }
+}
+
+/* Side gutter that also clears a phone's side system bars. */
+@utility px-gutter {
+  padding-left: max(var(--gutter), env(safe-area-inset-left, 0px));
+  padding-right: max(var(--gutter), env(safe-area-inset-right, 0px));
+}
+
+/* Type roles. Archivo's width axis does the heavy lifting. */
+@utility type-display {
+  font-weight: 600;
+  font-stretch: 116%;
+  letter-spacing: -0.045em;
+  line-height: 0.96;
+  text-wrap: balance;
+}
+
+@utility type-heading {
+  font-weight: 600;
+  font-stretch: 108%;
+  letter-spacing: -0.032em;
+  line-height: 1.06;
+  text-wrap: balance;
+}
+
+@utility type-label {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  line-height: 1rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+@utility text-gradient {
+  background-image: linear-gradient(
+    100deg,
+    var(--indigo-light) 0%,
+    #c4b5fd 28%,
+    var(--cyan-soft) 58%,
+    var(--indigo-light) 100%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+
+  &::selection {
+    color: #fff;
+  }
+}
+
+@utility bg-grid {
+  background-image:
+    linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+
+@utility bg-noise {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+}
+
+/* Paints only the 1px ring of an element with padding: 1px. */
+@utility border-mask {
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box exclude,
+    linear-gradient(#000 0 0);
+}
+
+@utility scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-strong) transparent;
+}
