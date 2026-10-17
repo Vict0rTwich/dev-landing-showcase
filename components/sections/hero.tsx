@@ -20,7 +20,7 @@ export function Hero() {
 
       <Container className="pt-12 pb-20 sm:pt-20 sm:pb-28 lg:pt-24">
         <a
-          href="#features"
+          href="/changelog#edge-functions-2"
           className="group inline-flex items-center gap-2.5 rounded-full border border-border bg-white/[0.03] py-1 pr-3 pl-1 text-[13px] text-muted-foreground transition-colors hover:border-border-strong hover:text-foreground"
         >
           <span className="rounded-full bg-indigo/15 px-2 py-0.5 text-[11px] font-medium text-indigo-light ring-1 ring-indigo/35 ring-inset">
